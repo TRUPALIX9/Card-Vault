@@ -1,36 +1,31 @@
 #!/bin/bash
 
-echo "🚀 Starting Card-Vault project..."
+# Exit on errors
+set -e
 
-# Check backend .env
-if [ ! -f "server/.env" ]; then
-  echo "❌ Missing server/.env file. Please create it with MongoDB and Cloudinary credentials."
-  exit 1
-fi
+# Colors
+GREEN='\033[0;32m'
+CYAN='\033[0;36m'
+NC='\033[0m' # No Color
 
-# Check for node_modules in server
-if [ ! -d "server/node_modules" ]; then
-  echo "📦 Installing backend dependencies..."
-  cd server && npm install && cd ..
-fi
-
-# Check for client dependencies
-if [ ! -d "client/node_modules" ]; then
-  echo "📦 Installing frontend dependencies..."
-  cd client && npm install && cd ..
-fi
+echo -e "${GREEN}🚀 Starting Card Vault Development Server...${NC}"
 
 # Start backend
-echo "🔧 Starting backend..."
-cd server
-node server.js &
-SERVER_PID=$!
-cd ..
+echo -e "${CYAN}▶ Starting Backend...${NC}"
+cd backend
+npx ts-node-dev src/index.ts &
+BACKEND_PID=$!
 
-# Start frontend (Expo)
-echo "📱 Starting Expo frontend..."
-cd client
+# Start frontend
+cd ../frontend
+echo -e "${CYAN}📱 Starting Frontend (Expo)...${NC}"
 npx expo start &
 
-echo "✅ Card-Vault is running!"
-echo "🧩 Backend PID: $SERVER_PID"
+# Capture Expo PID if needed (not killing for now)
+# FRONTEND_PID=$!
+
+# Wait for background processes to end
+trap "echo -e '\n🛑 Exiting...'; kill $BACKEND_PID; exit 0" SIGINT
+
+# Keep script alive
+wait

@@ -1,14 +1,11 @@
 #!/bin/bash
 
-echo "🛑 Stopping Card-Vault backend (if running)..."
+echo "🛑 Stopping Card Vault Dev Servers..."
 
-# Kill Node.js backend on port 5000
-PORT=5000
-PID=$(lsof -ti tcp:$PORT)
+# Kill ts-node-dev backend process
+pkill -f "ts-node-dev src/index.ts"
 
-if [ -n "$PID" ]; then
-  kill -9 $PID
-  echo "✅ Backend (port $PORT) stopped."
-else
-  echo "⚠️ Backend not running on port $PORT."
-fi
+# Kill Expo process
+pkill -f "expo start"
+
+echo "✅ All dev servers stopped."
