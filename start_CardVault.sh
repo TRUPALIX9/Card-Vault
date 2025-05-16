@@ -13,7 +13,7 @@ echo -e "${GREEN}🚀 Starting Card Vault Development Server...${NC}"
 # Start backend
 echo -e "${CYAN}▶ Starting Backend...${NC}"
 cd backend
-npx ts-node-dev src/index.ts &
+npm run dev &
 BACKEND_PID=$!
 
 # Start frontend
@@ -21,7 +21,7 @@ cd ../frontend
 echo -e "${CYAN}📱 Starting Frontend (Expo)...${NC}"
 npx expo start &
 
-# Capture Expo PID if needed (not killing for now)
+# Capture Expo PID if needed (not killing for no
 # FRONTEND_PID=$!
 
 # Wait for background processes to end

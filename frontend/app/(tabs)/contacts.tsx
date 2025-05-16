@@ -1,14 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { View, StyleSheet, FlatList } from "react-native";
-import {
-  Text,
-  Searchbar,
-  List,
-  IconButton,
-  FAB,
-  Appbar,
-} from "react-native-paper";
+import { Searchbar, List, IconButton, FAB, useTheme } from "react-native-paper";
 import axios from "axios";
 import { useRouter } from "expo-router";
 
@@ -22,6 +15,7 @@ interface IContact {
 }
 
 export default function ContactsPage() {
+  const theme = useTheme();
   const router = useRouter();
   const [contacts, setContacts] = useState<IContact[]>([]);
   const [filtered, setFiltered] = useState<IContact[]>([]);
@@ -61,21 +55,16 @@ export default function ContactsPage() {
   }, [searchQuery, contacts]);
 
   return (
-    <View style={styles.container}>
-      {/* <Appbar.Header elevated style={{ backgroundColor: "#000000" }}>
-        <Appbar.Content
-          title="Your Contacts"
-          titleStyle={{ fontWeight: "bold", color: "#008BFF" }}
-        />
-      </Appbar.Header> */}
-
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
+    >
       <Searchbar
         placeholder="Search by name, email, or company"
         value={searchQuery}
         onChangeText={setSearchQuery}
-        style={styles.searchbar}
-        inputStyle={{ color: "white" }}
-        placeholderTextColor="#888"
+        style={[styles.searchbar, { backgroundColor: theme.colors.surface }]}
+        inputStyle={{ color: theme.colors.text }}
+        placeholderTextColor={theme.colors.outline}
       />
 
       <FlatList
@@ -85,15 +74,17 @@ export default function ContactsPage() {
           <List.Item
             title={item.fullName}
             description={`${item.jobTitle || "Contact"} @ ${item.company}`}
-            titleStyle={{ color: "white" }}
-            descriptionStyle={{ color: "#ccc" }}
-            style={{ backgroundColor: "#1a1a1a", marginBottom: 4 }}
-            left={() => <List.Icon icon="account" color="#008BFF" />}
+            titleStyle={{ color: theme.colors.primary }}
+            descriptionStyle={{ color: theme.colors.onSurface }}
+            style={{ backgroundColor: theme.colors.surface, marginBottom: 4 }}
+            left={() => (
+              <List.Icon icon="account" color={theme.colors.primary} />
+            )}
             right={() => (
               <IconButton
                 icon="delete"
                 onPress={() => deleteContact(item._id)}
-                iconColor="#FF6B6B"
+                iconColor={theme.colors.error || "#FF6B6B"}
               />
             )}
           />
@@ -103,9 +94,9 @@ export default function ContactsPage() {
 
       <FAB
         icon="plus"
-        style={styles.fab}
-        onPress={() => router.push("/modal")}
-        color="white"
+        style={[styles.fab, { backgroundColor: theme.colors.primary }]}
+        onPress={() => router.push("../add")}
+        color={theme.colors.onPrimary}
       />
     </View>
   );
@@ -114,13 +105,11 @@ export default function ContactsPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#000000",
     paddingHorizontal: 12,
     paddingTop: 8,
   },
   searchbar: {
     marginBottom: 8,
-    backgroundColor: "#1a1a1a",
     borderRadius: 12,
   },
   listContent: {
@@ -130,6 +119,5 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 20,
     right: 20,
-    backgroundColor: "#008BFF",
   },
 });

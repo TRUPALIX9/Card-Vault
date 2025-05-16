@@ -1,49 +1,53 @@
 "use client";
+
 import { useRouter } from "expo-router";
 import { View, StyleSheet, Image } from "react-native";
-import {
-  Text,
-  Button,
-  useTheme,
-  Surface,
-  Appbar,
-  Divider,
-} from "react-native-paper";
+import { Text, Button, useTheme, Surface, Divider } from "react-native-paper";
 
 export default function HomeScreen() {
   const router = useRouter();
+  const theme = useTheme(); // ✅ Uses current active theme (light or dark)
 
   return (
-    <View style={styles.container}>
-      {/* <Appbar.Header elevated style={{ backgroundColor: "#000000" }}>
-        <Appbar.Content
-          title="Card Vault"
-          titleStyle={{ fontWeight: "bold", color: "#008BFF" }}
-        />
-      </Appbar.Header> */}
-
-      <Surface style={styles.card} elevation={4}>
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
+    >
+      <Surface
+        style={[styles.card, { backgroundColor: theme.colors.surface }]}
+        elevation={4}
+      >
         <Image
           source={require("../../assets/images/icon.png")}
           style={styles.logo}
         />
 
-        <Text variant="headlineMedium" style={styles.heading}>
+        <Text
+          variant="headlineMedium"
+          style={[styles.heading, { color: theme.colors.primary }]}
+        >
           Welcome to Card Vault
         </Text>
 
-        <Text variant="bodyMedium" style={styles.subheading}>
+        <Text
+          variant="bodyMedium"
+          style={[styles.subheading, { color: theme.colors.onSurface }]}
+        >
           Your all-in-one business card manager. Scan, store, and manage
           contacts seamlessly.
         </Text>
 
-        <Divider style={{ marginBottom: 24, backgroundColor: "#333" }} />
+        <Divider
+          style={{ marginBottom: 24, backgroundColor: theme.colors.outline }}
+        />
 
         <Button
           mode="contained"
           onPress={() => router.push("/(tabs)/contacts")}
-          style={styles.primaryButton}
-          labelStyle={styles.buttonText}
+          style={[
+            styles.primaryButton,
+            { backgroundColor: theme.colors.primary },
+          ]}
+          labelStyle={{ color: theme.colors.onPrimary }}
           icon="account-box-outline"
         >
           View Contacts
@@ -52,8 +56,8 @@ export default function HomeScreen() {
         <Button
           mode="outlined"
           onPress={() => router.push("/modal")}
-          style={styles.outlineButton}
-          labelStyle={styles.outlineButtonText}
+          style={[styles.outlineButton, { borderColor: theme.colors.primary }]}
+          labelStyle={{ color: theme.colors.primary }}
           icon="plus"
         >
           Add Contact
@@ -63,14 +67,16 @@ export default function HomeScreen() {
           mode="text"
           onPress={() => router.push("/(tabs)/profile")}
           style={styles.textButton}
-          labelStyle={styles.outlineButtonText}
+          labelStyle={{ color: theme.colors.primary }}
           icon="cog-outline"
         >
           Profile & Settings
         </Button>
       </Surface>
 
-      <Text style={styles.footer}>© 2025 Card Vault • v1.0</Text>
+      <Text style={[styles.footer, { color: theme.colors.primary }]}>
+        © 2025 Card Vault • v1.0
+      </Text>
     </View>
   );
 }
@@ -79,14 +85,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 0,
-    backgroundColor: "#000000",
   },
   card: {
     margin: 20,
     padding: 24,
     borderRadius: 16,
     alignItems: "center",
-    backgroundColor: "#1a1a1a",
   },
   logo: {
     width: 80,
@@ -95,22 +99,18 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   heading: {
-    color: "#008BFF",
     marginBottom: 8,
     textAlign: "center",
   },
   subheading: {
     marginBottom: 16,
-    color: "#ccc",
     textAlign: "center",
   },
   primaryButton: {
-    backgroundColor: "#008BFF",
     marginVertical: 8,
     width: "100%",
   },
   outlineButton: {
-    borderColor: "#008BFF",
     borderWidth: 1,
     marginVertical: 8,
     width: "100%",
@@ -119,16 +119,9 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     width: "100%",
   },
-  buttonText: {
-    color: "white",
-  },
-  outlineButtonText: {
-    color: "#008BFF",
-  },
   footer: {
     textAlign: "center",
     marginBottom: 12,
     fontSize: 12,
-    color: "#666",
   },
 });

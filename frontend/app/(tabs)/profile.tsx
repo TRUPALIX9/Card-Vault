@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 import {
   Text,
@@ -8,12 +8,10 @@ import {
   List,
   Switch,
   ActivityIndicator,
-  Appbar,
   Divider,
 } from "react-native-paper";
 import axios from "axios";
-import { useColorScheme } from "react-native";
-import { useRouter } from "expo-router";
+import { ThemeContext } from "@/context/ThemeContext";
 
 interface IUser {
   _id: string;
@@ -23,11 +21,11 @@ interface IUser {
 
 export default function UserProfileScreen() {
   const theme = useTheme();
-  const colorScheme = useColorScheme();
+  const { theme: appTheme, toggleTheme } = useContext(ThemeContext);
+  const isDark = appTheme === "dark";
+
   const [user, setUser] = useState<IUser | null>(null);
   const [loading, setLoading] = useState(true);
-  const [darkMode, setDarkMode] = useState(colorScheme === "dark");
-  const router = useRouter();
 
   useEffect(() => {
     axios
@@ -36,10 +34,6 @@ export default function UserProfileScreen() {
       .catch(() => setUser(null))
       .finally(() => setLoading(false));
   }, []);
-
-  useEffect(() => {
-    router.replace(`/?theme=${darkMode ? "dark" : "light"}`);
-  }, [darkMode]);
 
   const getInitials = (name: string) =>
     name
@@ -50,56 +44,64 @@ export default function UserProfileScreen() {
 
   if (loading) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#008BFF" />
+      <View
+        style={[styles.center, { backgroundColor: theme.colors.background }]}
+      >
+        <ActivityIndicator size="large" color={theme.colors.primary} />
       </View>
     );
   }
 
   return (
-    <View style={styles.container}>
-      {/* <Appbar.Header elevated style={{ backgroundColor: "#000000" }}>
-        <Appbar.Content
-          title="Profile"
-          titleStyle={{ fontWeight: "bold", color: "#008BFF" }}
-        />
-      </Appbar.Header> */}
-
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
+    >
       <ScrollView contentContainerStyle={styles.content}>
         {user ? (
           <>
             <Avatar.Text
               size={96}
               label={getInitials(user.fullName)}
-              style={[styles.avatar, { backgroundColor: "#008BFF" }]}
+              style={[styles.avatar, { backgroundColor: theme.colors.primary }]}
             />
-
-            <Text variant="headlineMedium" style={[styles.name]}>
+            <Text
+              variant="headlineMedium"
+              style={{ color: theme.colors.primary }}
+            >
               {user.fullName}
             </Text>
+            <Text style={{ color: theme.colors.onSurface }}>{user.email}</Text>
 
-            <Text style={[styles.email]}>{user.email}</Text>
-
-            <Divider style={styles.divider} />
+            <Divider
+              style={[
+                styles.divider,
+                { backgroundColor: theme.colors.outline },
+              ]}
+            />
 
             <View style={styles.section}>
-              <Text variant="titleMedium" style={styles.sectionTitle}>
+              <Text
+                variant="titleMedium"
+                style={{ color: theme.colors.primary }}
+              >
                 Settings
               </Text>
               <List.Item
                 title="Dark Mode"
-                titleStyle={{ color: "#ccc" }}
+                titleStyle={{ color: theme.colors.onSurface }}
                 left={() => (
-                  <List.Icon icon="theme-light-dark" color="#008BFF" />
+                  <List.Icon
+                    icon="theme-light-dark"
+                    color={theme.colors.primary}
+                  />
                 )}
                 right={() => (
                   <Switch
-                    value={darkMode}
-                    onValueChange={() => setDarkMode(!darkMode)}
-                    color="#008BFF"
+                    value={isDark}
+                    onValueChange={toggleTheme}
+                    color={theme.colors.primary}
                   />
                 )}
-                style={{ backgroundColor: "#1a1a1a" }}
               />
             </View>
           </>
@@ -108,7 +110,9 @@ export default function UserProfileScreen() {
             Failed to load profile.
           </Text>
         )}
-        <Text style={styles.footer}>© 2025 Card Vault • Profile</Text>
+        <Text style={[styles.footer, { color: theme.colors.outline }]}>
+          © 2025 Card Vault • Profile
+        </Text>
       </ScrollView>
     </View>
   );
@@ -117,51 +121,32 @@ export default function UserProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#000000",
   },
   content: {
     flexGrow: 1,
     alignItems: "center",
     padding: 24,
   },
-  loadingContainer: {
+  center: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#000000",
   },
   avatar: {
     marginTop: 32,
     marginBottom: 16,
   },
-  name: {
-    marginBottom: 4,
-    color: "#ffffff",
-  },
-  email: {
-    marginBottom: 32,
-    color: "#ccc",
-  },
   divider: {
     height: 1,
     width: "100%",
-    backgroundColor: "#333",
     marginVertical: 24,
   },
   section: {
     width: "100%",
   },
-  sectionTitle: {
-    marginBottom: 8,
-    marginLeft: 8,
-    color: "#008BFF",
-  },
   footer: {
     textAlign: "center",
     fontSize: 12,
-    color: "#666",
     paddingVertical: 12,
-    borderTopWidth: 1,
-    borderTopColor: "#1a1a1a",
   },
 });
