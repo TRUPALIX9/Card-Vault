@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import { View, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import { useTheme, Text, ActivityIndicator } from "react-native-paper";
