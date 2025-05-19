@@ -9,6 +9,8 @@ import { StatusBar } from "expo-status-bar";
 
 import { ThemeProvider, ThemeContext } from "@/context/ThemeContext";
 import { lightTheme, darkTheme } from "@/theme";
+import { View } from "react-native";
+import Header from "../components/Header";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -36,21 +38,22 @@ export default function RootLayout() {
     </ThemeProvider>
   );
 }
-
 function RootLayoutNav() {
   const { theme } = useContext(ThemeContext);
   const isDark = theme === "dark";
-
   const paperTheme = isDark ? darkTheme : lightTheme;
 
   return (
     <PaperProvider theme={paperTheme}>
       <NavigationThemeProvider value={paperTheme}>
         <StatusBar style={isDark ? "light" : "dark"} />
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-        </Stack>
+        <View style={{ flex: 1 }}>
+          <Header />
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+          </Stack>
+        </View>
       </NavigationThemeProvider>
     </PaperProvider>
   );

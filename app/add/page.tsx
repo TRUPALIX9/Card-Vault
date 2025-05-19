@@ -1,7 +1,7 @@
 "use client";
 import { useRef, useState, useEffect } from "react";
 import { View, StyleSheet, TouchableOpacity, Alert } from "react-native";
-import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
+import { CameraView, useCameraPermissions } from "expo-camera";
 import { useTheme, Text, ActivityIndicator } from "react-native-paper";
 import { useRouter } from "expo-router";
 import type { CameraViewRef } from "expo-camera";
