@@ -55,7 +55,7 @@ export default function HomeScreen() {
 
         <Button
           mode="outlined"
-          onPress={() => router.push("/modal")}
+          onPress={() => router.push("/add")}
           style={[styles.outlineButton, { borderColor: theme.colors.primary }]}
           labelStyle={{ color: theme.colors.primary }}
           icon="plus"
