@@ -1,201 +1,158 @@
-Got it, Trupal! Here's your **all-in-one `README.md` file** for the **Card Vault frontend** — complete with:
-
-* 📘 Project Overview
-* ✨ Features
-* 📂 How it Works
-* 🛠️ Installation & Running
-* ⚙️ Environment Setup
-* 🔗 API Integration
-* 📦 Build Process (EAS)
-* 🚧 Planned Features
-* 📱 Platform Info
-* 👤 Author Info
-* 📄 License & Credits
+Thanks, Trupal. Based on the structure you provided (`card-snap-frontend` using **Expo Router**, folders like `(tabs)`, `add/scan`, `manualAdd`, and assets/fonts/images), here is a complete and accurate `README.md` tailored to your actual project setup:
 
 ---
 
-### ✅ Save this as `README.md` in your `card-vault-frontend` root directory:
+### ✅ Save this in your `card-snap-frontend` project root as `README.md`:
 
-````markdown
-# 📇 Card Vault – React Native Frontend
+```markdown
+# 📇 Card Vault – Frontend (React Native + Expo + TypeScript)
 
-**Card Vault** is a cross-platform mobile app built with **React Native (Expo) + TypeScript** that allows users to **scan business cards**, extract contact details using OCR + AI, and store/manage contacts locally or through a backend powered by Node.js + MongoDB.
+Card Vault is a cross-platform mobile app built with **React Native (Expo)** and **TypeScript** for scanning business cards, extracting contact info using OCR, and saving it locally or syncing with a backend.
 
----
-
-## ✨ Features
-
-- 📸 Capture business card using the camera
-- 🧠 OCR processing powered by backend (Tesseract.js)
-- 🔍 AI/Regex-based contact extraction (name, phone, email, company, address)
-- 💾 Save and list contacts locally (AsyncStorage or MMKV)
-- ☁️ Optional cloud sync with backend
-- 🌓 Dark & Light theme support (react-native-paper)
-- 🧭 Expo Router for navigation
-- 📦 Production-ready via EAS Build (Android & iOS)
+This frontend uses **Expo Router** for file-based navigation and is optimized for Android, iOS, and Web.
 
 ---
 
-## 📂 How It Works
+## 🧭 Features
 
-1. User opens the **Scan** screen.
-2. Captures an image of a business card using the camera.
-3. Image is converted to base64 and sent to the backend via `/ocrExtract`.
-4. OCR is performed and contact fields are extracted via regex or Hugging Face API.
-5. User can view, edit, and save the contact.
-6. Contacts are stored locally or synced to the backend (MongoDB).
+- 📸 Scan business cards using device camera (`expo-camera`)
+- 🧠 OCR & AI/Regex-based parsing on backend
+- 🗂 View and manage contacts
+- 📝 Add contacts manually
+- 🌗 Light/dark mode with ThemeContext
+- 📁 Organized with file-based routing via Expo Router
+- ⚙️ Configurable with `.env` support for backend URL
+
+---
+
+## 📁 Project Layout (Key Folders)
+
+```
+
+app/
+├── (tabs)/           # Home, Profile, Contacts tabs
+├── add/              # Add contact manually or via scan
+├── contacts/\[id].tsx # View individual contact
+├── \_layout.tsx       # Root layout using Stack
+├── +not-found.tsx    # 404 fallback
+components/           # Header and UI components
+context/              # ThemeContext
+constants/            # Theme colors
+assets/               # Images & Fonts
+theme/                # Theme management
+
+````
 
 ---
 
 ## ⚙️ Environment Setup
 
-### 1. Create `.env` file
+Create a `.env` file in the root:
 
 ```env
 EXPO_PUBLIC_API_URL=http://<your-local-ip>:5091
 ````
 
-> Replace `<your-local-ip>` with your backend server's local IP address. This allows your device to access the backend while on the same network.
+> Replace `<your-local-ip>` with your backend's IP address (accessible from your phone on same network).
 
 ---
 
-## 🛠️ How to Run the App Locally
+## ▶️ Run the App Locally
 
-### Step 1: Clone the Repo
-
-```bash
-git clone https://github.com/TRUPALIX9/card-vault-frontend.git
-cd card-vault-frontend
-```
-
-### Step 2: Install Dependencies
+1. **Install dependencies**
 
 ```bash
 npm install
-# or
-yarn
 ```
 
-### Step 3: Start Expo Development Server
+2. **Start Expo**
 
 ```bash
 npx expo start
 ```
 
-### Step 4: Launch on Platform
+3. **Preview options**
 
-* Press `a` → Launch on Android device or emulator
-* Press `i` → Launch on iOS simulator (Mac only)
-* Press `w` → Run in Web browser
+* Press `a` → Android
+* Press `i` → iOS (Mac only)
+* Press `w` → Web
 
-> Make sure your mobile device is on the same network as your computer if testing on physical device.
+> Scan the QR code with the Expo Go app to preview on physical device.
 
 ---
 
-## 🔗 OCR API Integration
+## 📸 OCR API Used
 
-Frontend connects to the following backend endpoint:
+The app sends base64 image data to the backend via:
 
-### Endpoint
+### POST `/ocrExtract`
 
-```http
-POST /ocrExtract
-```
-
-### Request Payload
+**Payload:**
 
 ```json
 {
-  "base64": "<base64_image_data>"
+  "base64": "<image_data>"
 }
 ```
 
-### Example Response
+**Response:**
 
 ```json
 {
-  "text": "Extracted text from OCR",
+  "text": "Extracted OCR text",
   "data": {
     "name": "Jane Smith",
     "email": "jane@example.com",
-    "phone": "+1 123 456 7890",
-    "company": "Tech Co",
-    "address": "456 Innovation Drive, CA"
+    "phone": "+1 234 567 8900",
+    "company": "Startup Co",
+    "address": "456 Innovation Way"
   }
 }
 ```
 
-> The backend must return both raw OCR text and a `data` object with extracted fields.
-
 ---
 
-## 🚀 How to Build for Production (EAS Build)
+## 🏗 Build for Production (EAS)
 
-You can generate Android/iOS builds using **EAS Build**:
+You can generate installable builds using **EAS**:
 
-### Step 1: Install EAS CLI
+### Install EAS
 
 ```bash
 npm install -g eas-cli
 ```
 
-### Step 2: Configure Build Profiles
+### Login & configure
 
-Add this to `eas.json`:
-
-```json
-{
-  "build": {
-    "production": {
-      "developmentClient": false,
-      "distribution": "store"
-    }
-  }
-}
+```bash
+eas login
+eas init
 ```
 
-### Step 3: Build
-
-* For Android:
+### Build commands
 
 ```bash
 eas build -p android --profile production
-```
-
-* For iOS:
-
-```bash
 eas build -p ios --profile production
 ```
 
-> iOS builds require Apple Developer credentials and a Mac.
+> iOS builds require Apple Developer credentials.
 
 ---
 
-## 🧭 Platform Support
+## 🔧 Upcoming Features
 
-| Platform | Supported  | Notes                                         |
-| -------- | ---------- | --------------------------------------------- |
-| Android  | ✅ Yes      | Tested with Expo Go + APK build               |
-| iOS      | ✅ Yes      | Tested via simulator and device               |
-| Web      | ⚠️ Partial | OCR may not work consistently on all browsers |
-
----
-
-## 🚧 Planned Features
-
-* [ ] MMKV storage support for faster local reads
-* [ ] QR code & NFC contact sharing
-* [ ] Offline OCR fallback with local model
-* [ ] Tagging, categories & search
-* [ ] Cloud sync & user login
+* [ ] Offline OCR fallback (on-device)
+* [ ] MMKV-based local storage
+* [ ] NFC/QR contact exchange
+* [ ] Tagging + filter UI for contacts
 
 ---
 
-## 👤 Author
+## 🧑‍💻 Author
 
 **Trupal Patel**
-📧 Email: [trupal.work@gmail.com](mailto:trupal.work@gmail.com)
+📧 [trupal.work@gmail.com](mailto:trupal.work@gmail.com)
 🔗 GitHub: [@TRUPALIX9](https://github.com/TRUPALIX9)
 
 ---
@@ -208,11 +165,12 @@ MIT License © 2025 Trupal Patel
 
 ## 🙌 Acknowledgements
 
-* [Tesseract.js](https://github.com/naptha/tesseract.js)
-* [Hugging Face Transformers](https://huggingface.co/)
-* [React Native Paper](https://callstack.github.io/react-native-paper/)
 * [Expo](https://expo.dev/)
-* [MMKV Storage](https://github.com/mrousavy/react-native-mmkv)
+* [React Native Paper](https://callstack.github.io/react-native-paper/)
+* [Tesseract.js](https://github.com/naptha/tesseract.js)
+* [Hugging Face](https://huggingface.co/)
+* [Expo Router](https://expo.github.io/router/)
 
 ```
+
 ```
