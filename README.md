@@ -1,10 +1,4 @@
-Thanks, Trupal. Based on the structure you provided (`card-snap-frontend` using **Expo Router**, folders like `(tabs)`, `add/scan`, `manualAdd`, and assets/fonts/images), here is a complete and accurate `README.md` tailored to your actual project setup:
 
----
-
-### ✅ Save this in your `card-snap-frontend` project root as `README.md`:
-
-```markdown
 # 📇 Card Vault – Frontend (React Native + Expo + TypeScript)
 
 Card Vault is a cross-platform mobile app built with **React Native (Expo)** and **TypeScript** for scanning business cards, extracting contact info using OCR, and saving it locally or syncing with a backend.
